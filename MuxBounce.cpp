@@ -4,14 +4,9 @@
 
 unsigned long MuxBounce::duration() {   return millis() - previous_millis; }
 int MuxBounce::read()               {	return (int)state;                 }
+MuxBounce::MuxBounce()              {   return; }
 
 void MuxBounce::rebounce(unsigned long interval) {  this->rebounce_millis = interval; }
-
-MuxBounce::MuxBounce()
-{
-    return;
-}
-
 
 MuxBounce::MuxBounce(uint8_t pin, unsigned long interval_millis, int ID)
 {
@@ -25,8 +20,8 @@ MuxBounce::MuxBounce(uint8_t pin, unsigned long interval_millis, int ID)
 
 void MuxBounce::interval(unsigned long interval_millis)
 {
-  this->interval_millis = interval_millis;
-  this->rebounce_millis = 0;
+    this->interval_millis = interval_millis;
+    this->rebounce_millis = 0;
 }
 
 
@@ -36,18 +31,16 @@ int MuxBounce::update()
         rebounce(0);
         
         stateChangeLatched = 1 + !state;
-        
         return stateChanged = 1;
     }
 
     // We need to rebounce, so simulate a state change
-	if ( rebounce_millis && (millis() - previous_millis >= rebounce_millis) ) {
+	if (rebounce_millis && (millis() - previous_millis >= rebounce_millis)) {
         previous_millis = millis();
-		 rebounce(0);
+		rebounce(0);
          
-         stateChangeLatched = 1 + !state;
-         
-		 return stateChanged = 1;
+        stateChangeLatched = 1 + !state;
+        return stateChanged = 1;
 	}
 
 	return stateChanged = 0;
@@ -58,15 +51,15 @@ int MuxBounce::update()
 int MuxBounce::debounce()
 {
 	uint8_t newState = !digitalRead(pin);
-	if (state != newState ) {
+	if (state != newState) {
   		if (millis() - previous_millis >= interval_millis) {
   			previous_millis = millis();
   			state = newState;
   			return 1;
 	    }
     }
-  
-  return 0;
+    
+    return 0;
 }
 
 

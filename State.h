@@ -17,9 +17,4 @@
 #define ADD_STATE(state, s) state |= s
 #define RST_STATE(state) state = 0
 
-enum MemMode {
-    SRAM = 0,
-    EEPROM = BIT(0)
-};
-
 #endif

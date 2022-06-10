@@ -25,8 +25,8 @@
  risingEdge and fallingEdge contributed by Tom Harkaway
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef MuxBounce_h
-#define MuxBounce_h
+#ifndef MUXBOUNCE_H
+#define MUXBOUNCE_H
 
 #include <inttypes.h>
 

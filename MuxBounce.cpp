@@ -3,7 +3,7 @@
 
 
 unsigned long MuxBounce::duration() {   return millis() - previous_millis; }
-int MuxBounce::read()               {    return (int)state;                 }
+int MuxBounce::read()               {   return (int)state;                 }
 MuxBounce::MuxBounce()              {   return; }
 
 void MuxBounce::rebounce(unsigned long interval) {  this->rebounce_millis = interval; }

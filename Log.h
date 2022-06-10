@@ -2,7 +2,6 @@
 #define LOG_H
 
 #include "Arduino.h"
-#include "Dreambot.h"
 
 void Log(byte x);
 void Log(int x);

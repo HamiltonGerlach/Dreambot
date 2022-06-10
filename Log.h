@@ -1,6 +1,8 @@
 #ifndef LOG_H
 #define LOG_H
 
+#define DEBUG true
+
 #include "Arduino.h"
 
 void Log(byte x);

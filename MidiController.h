@@ -4,8 +4,6 @@
 #include "Controller.h"
 #include "Timer.h"
 
-// #define CUSTOM_MSG_NUM 1
-
 class MidiController : public Controller
 {
 private:
@@ -17,11 +15,7 @@ private:
     
     int Param, State;
         
-public:
-    byte CustomMsgIdx;
-    
-    // _customMsg CustomMessage[CUSTOM_MSG_NUM] = { NULL };
-    
+public:    
     void OnReceiveCC();
     void OnReceivePC();
     void OnResetCtrl();

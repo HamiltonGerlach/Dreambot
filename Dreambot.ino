@@ -1,7 +1,15 @@
 #include "Dreambot.h"
+#include "MidiController.h"
+#include "MidiBuffer.h"
+#include <MIDI.h>
+
 
 CtrlLED LED = CtrlLED(true);
 SwitchMux Switches = SwitchMux();
+
+MidiController CtrlMIDI;
+MIDI_CREATE_INSTANCE(HardwareSerial, MIDI_SERIAL, MIDI);
+
 
 void setup()
 {
@@ -14,8 +22,12 @@ void setup()
     pinMode(15, INPUT_PULLUP);
     
     #if DEBUG
-    Serial.begin(9600);
+    Serial.begin(USB_BAUDRATE);
     #endif
+    
+    // MIDI I/O
+    MIDI.begin(MIDI_BAUDRATE);
+    CtrlMIDI.Init(&MIDI_SERIAL, MIDI_CHANNEL);
 }
 
 
@@ -31,6 +43,7 @@ void loop()
     DPRINTLN(Changed);
     DPRINTLN("");
     
+    while (MIDI.read()) {}
     while (usbMIDI.read()) {}
     delay(100);
 }

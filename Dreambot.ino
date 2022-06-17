@@ -26,6 +26,8 @@ void setup()
     #endif
     
     // MIDI I/O
+    MIDI_SERIAL.setRX(MIDI_SERIAL_RX);
+    MIDI_SERIAL.setTX(MIDI_SERIAL_TX);
     MIDI.begin(MIDI_BAUDRATE);
     CtrlMIDI.Init(&MIDI_SERIAL, MIDI_CHANNEL);
 }

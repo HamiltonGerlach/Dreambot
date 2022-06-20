@@ -2,6 +2,8 @@
 #include "CtrlLED.h"
 
 
+const float PWM_MAX_RECPRHEX = PWM_MAX / 255.0f;
+
 
 CtrlLED::CtrlLED(bool State) {
     for (int i = 0; i < NUM_CTRL; i++)
@@ -77,13 +79,13 @@ void CtrlLED::SetRGB(int NumLED, unsigned int RGB)
     
     float r, g, b;
     
-    r = (float)Red(RGB) / 255.0f;
-    g = (float)Green(RGB) / 255.0f;
-    b = (float)Blue(RGB) / 255.0f;
+    r = Red(RGB);
+    g = Green(RGB);
+    b = Blue(RGB);
     
-    this->CtrlPWM[PwmNumR].setPin(PinNumR, (int)round(PWM_MAX * r), true);
-    this->CtrlPWM[PwmNumG].setPin(PinNumG, (int)round(PWM_MAX * g), true);
-    this->CtrlPWM[PwmNumB].setPin(PinNumB, (int)round(PWM_MAX * b), true);
+    this->CtrlPWM[PwmNumR].setPin(PinNumR, (int)round(PWM_MAX_RECPRHEX * r), true);
+    this->CtrlPWM[PwmNumG].setPin(PinNumG, (int)round(PWM_MAX_RECPRHEX * g), true);
+    this->CtrlPWM[PwmNumB].setPin(PinNumB, (int)round(PWM_MAX_RECPRHEX * b), true);
 }
 
 

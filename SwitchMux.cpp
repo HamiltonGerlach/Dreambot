@@ -47,3 +47,17 @@ bool SwitchMux::Update()
     
     return Changed;
 }
+
+
+
+void SwitchMux::Reset()
+{
+    for (int i = 0; i < SWITCH_MUX_CTRL_CHANNELS; i++)
+    {
+        _74HC4051_Select(i);
+        for (int j = 0; j < SWITCH_MUX_CTRL_NUM; j++)
+        {
+            Switches[j][i].reset();
+        }
+    }
+}

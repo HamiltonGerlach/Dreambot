@@ -14,6 +14,7 @@ class SwitchMux {
     public:
         SwitchMux();
         bool Update();
+        void Reset();
         // GetSwitchState();
         
     protected:

@@ -63,6 +63,13 @@ int MuxBounce::debounce()
 }
 
 
+void MuxBounce::reset() {
+    this->state = 0;
+    this->stateChangeLatched = 0;
+    this->previous_millis = millis();
+}
+
+
 
 uint8_t MuxBounce::getState() {
     return this->state;

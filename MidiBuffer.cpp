@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "MidiBuffer.h"
 
-static byte MidiBuffer::Data[3];
+byte MidiBuffer::Data[3];
 
 MidiBuffer::MidiBuffer() {
   this->Flush();

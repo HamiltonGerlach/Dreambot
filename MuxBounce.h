@@ -59,6 +59,7 @@ public:
     uint8_t getPin();
     uint8_t getLastStateChange();
     unsigned long getLastTime();
+    void reset();
 
     int ID;
   

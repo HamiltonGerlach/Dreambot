@@ -28,6 +28,7 @@ class CtrlLED {
         void Flush();
         
         void SetRGB(int NumLED, float Red, float Green, float Blue);
+        void SetRGB(int NumLED, unsigned int RGB);
         
         CtrlLED(bool State);
     protected:
@@ -39,5 +40,11 @@ class CtrlLED {
 inline int CalcPinAbs(int NumLED, PinLED ColorPin);
 inline int CalcPwmNum(int PinAbs);
 inline int CalcPinNum(int PinAbs);
+
+byte Red(unsigned int Hex);
+byte Green(unsigned int Hex);
+byte Blue(unsigned int Hex);
+
+unsigned int HexRGB(byte R, byte G, byte B);
 
 #endif

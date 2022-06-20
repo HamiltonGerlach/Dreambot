@@ -29,7 +29,10 @@ void setup()
     MIDI_SERIAL.setRX(MIDI_SERIAL_RX);
     MIDI_SERIAL.setTX(MIDI_SERIAL_TX);
     MIDI.begin(MIDI_BAUDRATE);
+    
     CtrlMIDI.Init(&MIDI_SERIAL, MIDI_CHANNEL);
+    
+    Switches.Reset();
 }
 
 
@@ -42,8 +45,11 @@ void loop()
     
     Changed = Switches.Update();
     
+    LED.SetRGB(0, 0x000000);
+    
     DPRINTLN(Changed);
     DPRINTLN("");
+    
     
     while (MIDI.read()) {}
     while (usbMIDI.read()) {}

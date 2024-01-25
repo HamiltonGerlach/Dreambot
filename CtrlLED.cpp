@@ -19,7 +19,12 @@ CtrlLED::CtrlLED(bool State) {
     }
     
     this->Flush();
+    
     this->State = State;
+    
+    this->Attenuation.R = 1.0f;
+    this->Attenuation.G = 1.0f;
+    this->Attenuation.B = 1.0f;
 }
 
 
@@ -56,9 +61,9 @@ void CtrlLED::SetRGB(int NumLED, float Red, float Green, float Blue)
     int PwmNumB = CalcPwmNum(PinAbsB);
     int PinNumB = CalcPinNum(PinAbsB);
     
-    this->CtrlPWM[PwmNumR].setPin(PinNumR, (int)round(PWM_MAX * Red), true);
-    this->CtrlPWM[PwmNumG].setPin(PinNumG, (int)round(PWM_MAX * Green), true);
-    this->CtrlPWM[PwmNumB].setPin(PinNumB, (int)round(PWM_MAX * Blue), true);
+    this->CtrlPWM[PwmNumR].setPin(PinNumR, (int)round(PWM_MAX * Red * this->Attenuation.R), true);
+    this->CtrlPWM[PwmNumG].setPin(PinNumG, (int)round(PWM_MAX * Green * this->Attenuation.G), true);
+    this->CtrlPWM[PwmNumB].setPin(PinNumB, (int)round(PWM_MAX * Blue * this->Attenuation.B), true);
 }
 
 
@@ -83,10 +88,21 @@ void CtrlLED::SetRGB(int NumLED, unsigned int RGB)
     g = Green(RGB);
     b = Blue(RGB);
     
-    this->CtrlPWM[PwmNumR].setPin(PinNumR, (int)round(PWM_MAX_RECPRHEX * r), true);
-    this->CtrlPWM[PwmNumG].setPin(PinNumG, (int)round(PWM_MAX_RECPRHEX * g), true);
-    this->CtrlPWM[PwmNumB].setPin(PinNumB, (int)round(PWM_MAX_RECPRHEX * b), true);
+    this->CtrlPWM[PwmNumR].setPin(PinNumR, (int)round(PWM_MAX_RECPRHEX * r * this->Attenuation.R), true);
+    this->CtrlPWM[PwmNumG].setPin(PinNumG, (int)round(PWM_MAX_RECPRHEX * g * this->Attenuation.G), true);
+    this->CtrlPWM[PwmNumB].setPin(PinNumB, (int)round(PWM_MAX_RECPRHEX * b * this->Attenuation.B), true);
 }
+
+
+
+
+void CtrlLED::SetAttenuation(float Red, float Green, float Blue)
+{
+    this->Attenuation.R = pow(Red, 2);
+    this->Attenuation.G = pow(Green, 2);
+    this->Attenuation.B = pow(Blue, 2);
+}
+
 
 
 inline int CalcPinAbs(int NumLED, PinLED ColorPin) { return (NumLED * RGB_PINS) + ColorPin; }

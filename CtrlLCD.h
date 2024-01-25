@@ -20,5 +20,3 @@
 // lcd.setCursor(0, 0);
 // print message
 // lcd.print("Hello, World!");
-
-

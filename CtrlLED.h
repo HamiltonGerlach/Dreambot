@@ -22,6 +22,8 @@
 
 enum PinLED { R, G, B };
 
+struct fRGB { float R, G, B; };
+
 class CtrlLED {
     public:
         void Flash();
@@ -29,11 +31,14 @@ class CtrlLED {
         
         void SetRGB(int NumLED, float Red, float Green, float Blue);
         void SetRGB(int NumLED, unsigned int RGB);
+        void SetAttenuation(float Red, float Green, float Blue);
         
         CtrlLED(bool State);
     protected:
         Adafruit_PWMServoDriver CtrlPWM[RGB_PINS];
         bool State;
+        
+        fRGB Attenuation;
 };
 
 

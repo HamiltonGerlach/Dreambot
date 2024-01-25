@@ -15,4 +15,6 @@
 #define MIDI_SERIAL_RX 0
 #define MIDI_SERIAL_TX 1
 
+#define PIN_EXP_INPUT 16
+
 #endif

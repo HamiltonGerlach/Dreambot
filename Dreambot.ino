@@ -1,6 +1,7 @@
 #include "Dreambot.h"
 #include "MidiController.h"
 #include "MidiBuffer.h"
+#include <Filters.h>
 #include <MIDI.h>
 
 
@@ -32,6 +33,13 @@ char Modes[3][10] = {
     "Session  "
 };
 
+
+
+FilterTwoPole* expFilt = new FilterTwoPole;
+
+byte expVal, expValPrev;
+
+
 void setup()
 {
     // LCD test routine
@@ -49,6 +57,7 @@ void setup()
     pinMode(13, INPUT_PULLUP);
     pinMode(14, INPUT_PULLUP);
     pinMode(15, INPUT_PULLUP);
+    pinMode(16, INPUT);
     
     #if DEBUG
     Serial.begin(USB_BAUDRATE);
@@ -75,6 +84,9 @@ void setup()
     
     delay(1000);
     LED.Flush();
+    
+    expFilt->setAsFilter(LOWPASS_BUTTERWORTH, 2.50f);
+    expValPrev = 0;
 }
 
 
@@ -83,7 +95,6 @@ void loop()
 {
     bool Changed = false;
     Changed = Switches.Update(&SwtInfo);
-    
     
     if (Changed) {
         for (int i = 0; i < SWITCH_MUX_CTRL_CHANNELS; i++)
@@ -95,16 +106,19 @@ void loop()
                     byte swId = SwtInfo.Swt[j][i].ID;
                     if (SwtInfo.Swt[j][i].fallingEdge)
                     {
-                        if ((swId < 17) && (swId > 3))
+                        if ((swId <= 16) && (swId >= 4))
                         {
                             LED.SetRGB(swId-1, 0.0f, 0.0f, 0.0f);
+                            usbMIDI.sendNoteOff((16 - swId) + 60 + Octave * 12, 127, 1);
                         }
                         
-                        if ((swId == 16) || (swId == 14) || (swId == 12) || (swId == 11))
-                        {
-                            usbMIDI.sendControlChange(swId / 2 + 10, 0, 1);
-                            DPRINT(swId / 2 + 10); DPRINT(' ');
-                        }
+                        // if ((swId == 16) || (swId == 14) || (swId == 12) || (swId == 11))
+                        // {
+                        //     usbMIDI.sendControlChange(swId / 2 + 10, 0, 1);
+                        //     DPRINT(swId / 2 + 10); DPRINT(' ');
+                        // }
+                        
+                        
                     }
                     if (SwtInfo.Swt[j][i].risingEdge)
                     {
@@ -113,8 +127,10 @@ void loop()
                         if ((swId <= 16) && (swId >= 4))
                         {
                             LED.SetRGB(swId-1, 1.0f, 1.0f, 1.0f);
+                            usbMIDI.sendNoteOn((16 - swId) + 60 + Octave * 12, 127, 1);
                         }
                         
+                        /*
                         if ((swId == 15) || (swId == 13) || (swId == 10) || (swId == 8) || (swId == 6))
                         {
                             usbMIDI.sendProgramChange(swId / 2 + 10, 1);
@@ -133,7 +149,7 @@ void loop()
                             usbMIDI.sendControlChange(swId / 2 + 10, ControlValues[swId], 1);
                             DPRINT(swId / 2 + 10);
                         }
-                        
+                        */
                         
                         // Dreambot mode switch
                         if ((swId == 0))
@@ -204,6 +220,16 @@ void loop()
             }
         }
     }
+    
+    
+    // Handle EXP in
+    expFilt->input(analogRead(PIN_EXP_INPUT));
+    byte expVal = min(max(round((expFilt->output() / 965) * 127 - 0), 0), 127);
+    if (expValPrev != expVal) {
+        usbMIDI.sendControlChange(30, expVal, 1);
+        expValPrev = expVal;
+        DPRINTLN(expVal);
+    } 
     
     
     // Handle MIDI thru
